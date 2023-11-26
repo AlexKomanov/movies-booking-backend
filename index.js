@@ -5,9 +5,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = 8000;
 const cookieParser = require('cookie-parser');
+const authRoutes = require('./Routes/Auth')
 
 require('dotenv').config();
 require('./db')
+
+
 
 
 app.use(bodyParser.json());
@@ -25,6 +28,8 @@ app.use(
     })
 );
 app.use(cookieParser());
+
+app.use('/auth', authRoutes);
 
 
 app.get('/', (req, res) => {
