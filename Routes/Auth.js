@@ -23,29 +23,29 @@ function createResponse(ok, message, data) {
 
 router.post('/register', async (req, res, next) => {
     try {
-        const { name, email, password} = req.body;
-        const existingUser = await User.findOne({email: email})
+        const { name, email, password } = req.body;
+        const existingUser = await User.findOne({ email: email })
 
-        if(existingUser) {
+        if (existingUser) {
             return res.status(409).json(createResponse(false, 'This Email already exists'));
         }
 
         const newUser = new User({
             name, password, email
         });
-        
+
         await newUser.save();
         res.status(201).json(createResponse(true, "Registration Completed Successfully!"))
-    } 
+    }
     catch (error) {
         next(error);
     }
 })
 
 router.post('/login', async (req, res, next) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
-    
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
     if (!user) {
         return res.status(400).json(createResponse(false, 'Invalid credentials'));
     }
@@ -57,8 +57,8 @@ router.post('/login', async (req, res, next) => {
 
     const authToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '10m' });
     const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_REFRESH_SECRET_KEY, { expiresIn: '30m' });
-    res.cookie('authToken', authToken,  { httpOnly: true, secure: true, sameSite: 'None' });
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'None' });
+    res.cookie('authToken', authToken, { httpOnly: true });
+    res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
     res.status(200).json(createResponse(true, 'Login successful', {
         authToken,
@@ -67,7 +67,7 @@ router.post('/login', async (req, res, next) => {
 
 })
 
-router.post('/sendotp', async (req, res, next) => {})
+router.post('/sendotp', async (req, res, next) => { })
 
 router.get('/checklogin', authTokenHandler, async (req, res) => {
     res.json({
