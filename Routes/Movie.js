@@ -27,25 +27,56 @@ router.get('/test', async (req, res) => {
     })
 })
 
-
 router.post('/createmovie', adminTokenHandler, async (req, res, next) => {
-    try{
-
+    try {
+        const { title, description, portraitImgUrl, landscapeImgUrl, rating, genre, duration } = req.body;
+        const newMovie = new Movie({ title, description, portraitImgUrl, landscapeImgUrl, rating, genre, duration })
+        await newMovie.save();
+        res.status(201).json({
+            ok: true,
+            message: "Movie was added successfully"
+        });
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
     }
 })
+
 router.post('/addcelebtomovie', adminTokenHandler, async (req, res, next) => {
-    try{
+    try {
+        const { movieId, celebType, celebName, celebRole, celebImage } = req.body;
+        const movie = await Movie.findById(movieId);
+        if (!movie) {
+            return res.status(404).json({
+                ok: false,
+                message: "Movie not found"
+            });
+        }
+        const newCeleb = {
+            celebType,
+            celebName,
+            celebRole,
+            celebImage
+        };
+        if (celebType === "cast") {
+            movie.cast.push(newCeleb);
+        } else {
+            movie.crew.push(newCeleb);
+        }
+        await movie.save();
 
+        res.status(201).json({
+            ok: true,
+            message: "A celebrity was added successfully"
+        });
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
     }
 })
+
 router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
@@ -53,7 +84,7 @@ router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
     }
 })
 router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
@@ -61,7 +92,7 @@ router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, nex
     }
 })
 router.post('/bookticket', authTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
@@ -69,7 +100,7 @@ router.post('/bookticket', authTokenHandler, async (req, res, next) => {
     }
 })
 router.get('/movies', authTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
@@ -78,7 +109,7 @@ router.get('/movies', authTokenHandler, async (req, res, next) => {
 })
 
 router.get('/movies/:id', authTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
@@ -87,7 +118,7 @@ router.get('/movies/:id', authTokenHandler, async (req, res, next) => {
 })
 
 router.get('/screensbycity', authTokenHandler, async (req, res, next) => {
-    try{
+    try {
 
     }
     catch (err) {
