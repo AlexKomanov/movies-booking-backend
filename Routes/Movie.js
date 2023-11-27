@@ -77,12 +77,27 @@ router.post('/addcelebtomovie', adminTokenHandler, async (req, res, next) => {
 
 router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
     try {
+        const { name, location, seats, city, screenType } = req.body; const newScreen = new Screen({
+            name,
+            location,
+            seats,
+            city: city.toLowerCase(),
+            screenType,
+            movieSchedules: []
+        });
 
+        await newScreen.save();
+
+        res.status(201).json({
+            ok: true,
+            message: "Screen added successfully"
+        });
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
     }
 })
+
 router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, next) => {
     try {
 
