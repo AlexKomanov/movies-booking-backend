@@ -21,27 +21,14 @@ const bookingSchema = new mongoose.Schema({
     },
     seats: [
         {
-            // { row: 'D', col: 0, seat_id: '10', price: 300 }
-
-            // row: {
-            //     type: String,
-            //     required: true
-            // },
-            // col: {
-            //     type: Number,
-            //     required: true
-            // },
             seat_id: {
                 type: String,
                 required: true
             },
             type: String,
             status: String,
-            // type: {
-            //     type: String,
-            //     required: true
-            // }
-            
+            seatRow: String,
+            seatRowName: String,
         }
     ],
     totalPrice: {

@@ -27,6 +27,8 @@ router.get('/test', async (req, res) => {
     })
 })
 
+// *************** Only Admin APIs ***************
+
 router.post('/createmovie', adminTokenHandler, async (req, res, next) => {
     try {
         const { title, description, portraitImgUrl, landscapeImgUrl, rating, genre, duration } = req.body;
@@ -100,12 +102,45 @@ router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
 
 router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, next) => {
     try {
+        const { screenId, movieId, showTime, showDate } = req.body;
+        const screen = await Screen.findById(screenId);
+        if (!screen) {
+            return res.status(404).json({
+                ok: false,
+                message: "Screen not found"
+            });
+        }
+
+        const movie = await Movie.findById(movieId);
+        if (!movie) {
+            return res.status(404).json({
+                ok: false,
+                message: "Movie not found"
+            });
+        }
+
+        screen.movieSchedules.push({
+            movieId,
+            showTime,
+            notavailableseats: [],
+            showDate
+        });
+
+        await screen.save();
+
+        res.status(201).json({
+            ok: true,
+            message: "Movie schedule added successfully"
+        });
 
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
     }
 })
+
+// *************** Regular User APIs ***************
+
 router.post('/bookticket', authTokenHandler, async (req, res, next) => {
     try {
 
