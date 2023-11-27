@@ -28,13 +28,72 @@ router.get('/test', async (req, res) => {
 })
 
 
-router.post('/createmovie', adminTokenHandler, async (req, res, next) => {})
-router.post('/addcelebtomovie', adminTokenHandler, async (req, res, next) => {})
-router.post('/createscreen', adminTokenHandler, async (req, res, next) => {})
-router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, next) => {})
-router.post('/bookticket', authTokenHandler, async (req, res, next) => {})
-router.get('/getmovies', authTokenHandler, async (req, res, next) => {})
-router.get('/getsreens', authTokenHandler, async (req, res, next) => {})
+router.post('/createmovie', adminTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+router.post('/addcelebtomovie', adminTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+router.post('/bookticket', authTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+router.get('/movies', authTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+
+router.get('/movies/:id', authTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
+
+router.get('/screensbycity', authTokenHandler, async (req, res, next) => {
+    try{
+
+    }
+    catch (err) {
+        next(err) // Passes any type of error to the error handling middle are
+    }
+})
 
 router.use(errorHandler)
 
