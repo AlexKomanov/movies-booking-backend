@@ -207,7 +207,12 @@ router.post('/bookticket', authTokenHandler, async (req, res, next) => {
 
 router.get('/movies', authTokenHandler, async (req, res, next) => {
     try {
-
+        const movies = await Movie.find(); // Will return a list of items
+        res.status(200).json({
+            ok: true,
+            data: movies,
+            message: 'Movies were retrieved successfully'
+        });
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
@@ -216,7 +221,21 @@ router.get('/movies', authTokenHandler, async (req, res, next) => {
 
 router.get('/movies/:id', authTokenHandler, async (req, res, next) => {
     try {
+        const movieId = req.params.id;
+        const movie = await Movie.findById(movieId);
+        if (!movie) {
+            // If the movie is not found, return a 404 Not Found response
+            return res.status(404).json({
+                ok: false,
+                message: 'Movie not found'
+            });
+        }
 
+        res.status(200).json({
+            ok: true,
+            data: movie,
+            message: 'Movie retrieved successfully'
+        });
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
