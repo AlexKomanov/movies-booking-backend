@@ -21,7 +21,7 @@ const bookingSchema = new mongoose.Schema({
     },
     seats: [
         {
-            seat_id: {
+            seatId: {
                 type: String,
                 required: true
             },
@@ -37,6 +37,15 @@ const bookingSchema = new mongoose.Schema({
     },
     paymentId: {
         type: String,
+        required: true
+    },
+    paymentType: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User Model
         required: true
     }
 });

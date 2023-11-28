@@ -79,7 +79,9 @@ router.post('/addcelebtomovie', adminTokenHandler, async (req, res, next) => {
 
 router.post('/createscreen', adminTokenHandler, async (req, res, next) => {
     try {
-        const { name, location, seats, city, screenType } = req.body; const newScreen = new Screen({
+        const { name, location, seats, city, screenType } = req.body;
+
+        const newScreen = new Screen({
             name,
             location,
             seats,
@@ -143,12 +145,66 @@ router.post('/addmoviescheduletoscreen', adminTokenHandler, async (req, res, nex
 
 router.post('/bookticket', authTokenHandler, async (req, res, next) => {
     try {
+        const { showTime, showDate, movieId, screenId, seats, totalPrice, paymentId, paymentType } = req.body;
+
+        // TODO: Add a payment id verification later
+
+        const screen = await Screen.findById(screenId);
+
+        if (!screen) {
+            return res.status(404).json({
+                ok: false,
+                message: "Screen was not found"
+            });
+        }
+
+        const movieSchedule = screen.movieSchedules.find(schedule =>
+            schedule.movieId == movieId
+            && schedule.showTime == showTime
+            && schedule.showDate == showDate
+        );
+
+        if (!movieSchedule) {
+            return res.status(404).json({
+                ok: false,
+                message: "Movie schedule was not found"
+            });
+        }
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                message: "User was not found"
+            });
+        }
+
+
+        const newBooking = new Booking({ userId: req.userId, showTime, showDate, movieId, screenId, seats, totalPrice, paymentId, paymentType })
+        await newBooking.save();
+
+        const seatsIds = seats.map(seat => seat.seatId);
+
+        movieSchedule.notAvailableSeats.push(...seatsIds);
+
+        await screen.save();
+
+        user.bookings.push(newBooking._id);
+        await user.save();
+
+        console.log('user saved');
+
+        res.status(201).json({
+            ok: true,
+            message: "Booking successful"
+        });
 
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
     }
 })
+
 router.get('/movies', authTokenHandler, async (req, res, next) => {
     try {
 
