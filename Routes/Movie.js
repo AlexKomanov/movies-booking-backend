@@ -243,8 +243,15 @@ router.get('/movies/:id', authTokenHandler, async (req, res, next) => {
 })
 
 router.get('/screensbycity', authTokenHandler, async (req, res, next) => {
-    try {
+    const city = req.params.city.toLowerCase();
 
+    try {
+        const screens = await Screen.find({ city });
+        if (!screens || screens.length === 0) {
+            return res.status(404).json(createResponse(false, 'No screens were found in the specified city', null));
+        }
+
+        res.status(200).json(createResponse(true, 'Screens retrieved successfully', screens));
     }
     catch (err) {
         next(err) // Passes any type of error to the error handling middle are
