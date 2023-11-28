@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./Routes/Auth')
 const adminRoutes = require('./Routes/Admin')
 const movieRoutes = require('./Routes/Movie')
+const imageUploadRoutes = require('./Routes/ImageUploadRoutes');
 
 require('dotenv').config();
 require('./db')
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use('/movie', movieRoutes);
+app.use('/image', imageUploadRoutes);
 
 
 app.get('/', (req, res) => {
